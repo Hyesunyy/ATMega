@@ -5,15 +5,17 @@
  * Author : user
  */ 
 
-#include <avr/io.h>
-
-
+#include <avr/io.h> // AVR 기본 헤더 
+#include <alloca.h>
+//LED port :PG4
 int main(void)
 {
-    /* Replace with your application code */
-	printf("Hello world");
-    while (1) 
+	DDRG |= 0x10; //1=out , 0= input xxx1 0000
+	    while (1) 
     {
+		PORTG | = 0x10;
+		
+		
     }
 }
 
