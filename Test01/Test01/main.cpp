@@ -11,6 +11,7 @@
 int main(void)
 {
     /* Replace with your application code */
+	printf("Hello world");
     while (1) 
     {
     }
