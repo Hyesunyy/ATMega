@@ -74,7 +74,7 @@ int main(void)
 			    PORTG &= ~(0x10); //0 입력
 			    delay_control(d2);
 				d2+=50;
-				Check(); //
+				Check(); ////
 			}
 		   
 		}
