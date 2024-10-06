@@ -55,26 +55,26 @@ int main(void)
 	    int c = Check();
        while (1)
 	   {
-		   if(c==1)
+		   if(c==1) //G1이 눌린경우 (빠르게 점멸)
 		   {
 				PORTG |= 0x10; // 4번 핀에 1 입력
 				delay_control(d1);
 				PORTG &= ~(0x10); //0 입력
 				delay_control(d1);
-				if(d1>0) d1-=50;
-				Check();
+				if(d1>0) d1-=50; // 딜레이 감소 
+				c = Check(); //c 값 리셋
 			}
 				
 			
 		   
-		    if(c==2)
+		    if(c==2)// G2가 눌린경우 (느리게 점멸)
 			{
 			    PORTG |= 0x10; // 4번 핀에 1 입력
 			    delay_control(d2);
 			    PORTG &= ~(0x10); //0 입력
 			    delay_control(d2);
-				d2+=50;
-				Check(); ////
+				d2+=50; //딜레이 추가
+				c = Check(); //c값 리셋
 			}
 		   
 		}
