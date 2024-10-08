@@ -13,13 +13,15 @@
 // G0 :  program start, G1:점점 빠르게 점멸 , G2 :  점점 느리게 점멸 
 
  int Check()
- {
+ {	
+	 char v0 = PING & 0x01;
 	 char v1 = PING & 0x02;
 	 char v2 = PING & 0x04;
 
+	 if(v0==0) return 0;
 	 if(v1==0) return 1;
 	 if(v2==0) return 2;
-	 else return 0;
+	 else return -1;
  }
 
 
@@ -44,36 +46,51 @@ int main(void)
    
    while(1)
    {
-	   char v = PING &=0x01;
-	   if(v==0){ mode=1;break;}
-	}   //G0 누르면 프로그램 시작, 눌리기 전까지 대기 
+	   if(check()==0){
+		   PORTG |= 0x10;
+		   _delay_ms(100);
+		   PORTG &= ~0x10;
+		   _delay_ms(100);
+		   //한 번 점멸하며 프로그램 시작을 알림
+		   mode=1;
+		   break;
+	   }
+	}   //G0 누르기 전까지 대기, 누르면 프로그램 시작
 	
-   
-   if(mode)
-   {
-
-       while (1)
-	   {	    int c = Check();
+  
+       while (1) 
+	   {	   
+		   int c = Check(); //sw 체크
+		   
+		   if(c==0) {
+			   PORTG &= ~(0x10);
+			   _delay_ms(50); // G0누르면 소등
+			   
+		   }
+			   
 		   if(c==1) //G1이 눌린경우 (빠르게 점멸)
-		   {
+		   {	
+			   if(mode){
 				PORTG |= 0x10; // 4번 핀에 1 입력
 				delay_control(d1);
 				PORTG &= ~(0x10); //0 입력
 				delay_control(d1);
-				if(d1>0) d1-=50; // 딜레이 감소 
-				//c 값 리셋
-			}
+				if(d1>0) d1-=50; // 딜레이 감소
+				}
+		   }
 				
 			
 		   
 		    if(c==2)// G2가 눌린경우 (느리게 점멸)
 			{
+			if(mode){
 			    PORTG |= 0x10; // 4번 핀에 1 입력
 			    delay_control(d2);
 			    PORTG &= ~(0x10); //0 입력
 			    delay_control(d2);
 				d2+=50; //딜레이 추가
 				c = Check(); //c값 리셋
+				}
 			}
 		   
 		}
