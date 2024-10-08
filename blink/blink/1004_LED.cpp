@@ -18,7 +18,6 @@
 	 char v2 = PING & 0x04;
 
 	 if(v1==0) return 1;
-	 else return 0;
 	 if(v2==0) return 2;
 	 else return 0;
  }
@@ -52,9 +51,9 @@ int main(void)
    
    if(mode)
    {
-	    int c = Check();
+
        while (1)
-	   {
+	   {	    int c = Check();
 		   if(c==1) //G1이 눌린경우 (빠르게 점멸)
 		   {
 				PORTG |= 0x10; // 4번 핀에 1 입력
@@ -62,7 +61,7 @@ int main(void)
 				PORTG &= ~(0x10); //0 입력
 				delay_control(d1);
 				if(d1>0) d1-=50; // 딜레이 감소 
-				c = Check(); //c 값 리셋
+				//c 값 리셋
 			}
 				
 			
