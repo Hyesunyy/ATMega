@@ -70,12 +70,13 @@ int main(void)
 			   
 		   if(c==1) //G1이 눌린경우 (빠르게 점멸)
 		   {	
+			   if(d1>=100) d1-=50; // 딜레이 감소
+			   
 			   if(mode){
 				PORTG |= 0x10; // 4번 핀에 1 입력
 				delay_control(d1);
 				PORTG &= ~(0x10); //0 입력
 				delay_control(d1);
-				if(d1>0) d1-=50; // 딜레이 감소
 				}
 		   }
 				
