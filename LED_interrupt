@@ -1,0 +1,63 @@
+#define F_CPU 16000000L
+#define sw1 PORTG4 // (1<< 0)1을 0번 shift 0001
+#define sw2 PORTD0 // 1번 shift 0010
+#define sw3 PORTD1
+#define LED1 PORTG1
+#define _BV(bit) (1<<(bit))
+
+#include <avr/io.h>
+#include <util/delay.h>
+#include <avr/interrupt.h>
+
+volatile int ival =1000;
+
+void StandBy()
+{
+	DDRG &= 0x10; //P4: 입력
+	PORTG |= 0x10; //P4 : pull-up
+	
+	while((PORTG & 0x10)==0); // 초기값 1로 가정(pull-up), N/a 값에 의해 0이 될 경우 1이 될 때까지 대기
+	
+	while(1)
+	{
+		if((PORTG & 0x10)==0) break;  // sw1 이 눌릴 경우 무한루프 탈출
+	}
+	
+}
+
+
+ISR(INT0_vect)
+{
+	ival-=200;
+	if(ival<10) ival=100;
+}
+
+ISR(INT1_vect)
+{
+	ival+=200;
+}
+
+int main (void)
+{	
+	DDRD &= ~0x03; // D0, D1 에 0 (입력 선언), 0011
+	PORTG |= 0x02; // G1 에 1 (출력 선언) ,0010
+	
+	EIMSK |=0x03; // 입력에 대한 인터럽트 마스크, 0011
+	EICRA |= 0x0F; // rising edge, 1111
+	
+	
+	PORTG |= 0x02;
+	StandBy();
+	PORTG &= ~0x02; 
+	
+	while(1)
+	{
+		PORTG |= 0x02;
+		_delay_ms(100);
+		PORTG &= ~0x02;
+		_delay_ms(100);
+		
+	}
+	
+	
+}
